@@ -45,6 +45,8 @@ Replace sample data with verified information. Only add real doctor details and 
 - Staff dashboard **preview**: `/staff-demo`. Browse fictional records, filter, cancel locally created demo bookings and reset local data. The screen is intentionally public, and **must not be used as a real admin interface**.
 - Sample records are stored only in the visitor's browser `localStorage`; not shared between users, devices or browsers. **Do not enter real patient details.**
 - Duplicate reservations are blocked within the same browser, but this is **not** a cross-device booking system.
-- See `docs/PHASE3-BACKEND.md` for the planned private database, server-side validation and authenticated staff-access migration steps.
+- See `docs/PHASE3-BACKEND.md` for the dedicated fictional booking database, disabled serverless API, and required secure server-only key setup.
 
-Production go-live blockers: dedicated database, authenticated and authorised staff accounts, transaction-safe slot constraints, secure patient identity verification, abuse protection, privacy notice, retention/deletion processes, and real-clinic details.
+**Database milestone (2026-11-23):** Dedicated Supabase project `we-care-clinic` (`xtlhcwonhgfwzydgrmeq`) created in Mumbai, with the fictional booking table, RLS and unique slot index applied and tested. The Vercel site has its public DB URL configured but **database write API remains disabled** until server-only credentials and controlled integration tests are complete. The public booking UI is still local-only.
+
+Production go-live blockers: authenticated and authorised staff accounts, genuine patient registration and privacy controls, protected server-side patient booking flows, abuse protection, retention/deletion processes, and verified real-clinic details.

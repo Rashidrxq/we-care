@@ -1,5 +1,7 @@
--- Reference schema for a future DEDICATED Supabase project only.
--- NOT APPLIED. Do not run in the career-intelligence-agent database.
+-- Applied on 2026-11-23 to the dedicated WE CARE Supabase project:
+-- project ref xtlhcwonhgfwzydgrmeq (ap-south-1).
+-- DO NOT apply again: this is a reference copy of the initial migration.
+-- Never run in the career-intelligence-agent database.
 -- All records contain fictional patient IDs, not real names or medical data.
 -- This is not a real patient scheduling schema or a staff authentication system.
 

@@ -15,17 +15,30 @@ All protected endpoints **fail closed with HTTP 503** when database configuratio
 
 The frontend at `/book` intentionally remains browser-only and is **not connected** to the server API. The public `/staff-demo` route uses fictional browser-local data only.
 
-## Dedicated test database setup (not done yet)
+## Dedicated fictional-data database — provisioned 2026-11-23
 
-1. Create a fresh **separate** Supabase project in the user's chosen organization, on a free tier if available. Confirm any nonzero charges before creation.
-2. Review the SQL in docs/booking-demo-schema.sql and apply it on that dedicated project after testing. Keep RLS enabled and keep anon/authenticated roles revoked.
-3. In the Vercel **we-care-healthcare** project, configure these server-side variables:
-   - SUPABASE_URL — dedicated project's API URL.
-   - SUPABASE_SERVICE_ROLE_KEY — dedicated project's secret **server-only** service role key. Never use VITE_ prefix, place in frontend code, or commit it.
-   - WECARE_ALLOWED_ORIGINS — production hostname(s), comma-separated (for example https://we-care-healthcare-six.vercel.app).
-   - WECARE_DEMO_SERVER_API_KEY — randomly generated 32+ byte test-only secret, never exposed to the browser.
-   - WECARE_BOOKING_API_ENABLED — set to true only after the safety and SQL checks pass. This does **not** activate real patient booking.
-4. Redeploy. Test readiness, invalid/missing write access key (401), duplicate-slot rejection (unique partial index), cancellation token validation, and 503 fail-closed behaviour when the database or key is absent.
+The WE CARE project **already exists** in Supabase at [WE CARE dashboard](https://supabase.com/dashboard/project/xtlhcwonhgfwzydgrmeq) (project ref `xtlhcwonhgfwzydgrmeq`, region `ap-south-1`). Quoted new project cost: $0/month, subject to free-plan limits.
+
+The migration in `docs/booking-demo-schema.sql` was successfully applied using the Supabase migration tool. Verified:
+- RLS is enabled.
+- `anon` and `authenticated` roles have no table privileges; only the server role can access bookings.
+- The active slot partial unique index rejects duplicate bookings.
+- IST schedule check rejects Sunday bookings.
+- Security advisor reports one INFO finding (`rls_enabled_no_policy`) because the private server-only table intentionally has **no public policies**.
+- Performance advisor reports an unused index on the new empty table (expected).
+- All test inserts were removed (zero fictional booking rows left).
+
+Three Vercel environment variables were configured for production and preview: `SUPABASE_URL` (dedicated project URL), `WECARE_ALLOWED_ORIGINS` and `WECARE_BOOKING_API_ENABLED=false`. This is **not yet an active DB-backed API**.
+
+### Remaining private-key setup (manual for account owner)
+
+In the Vercel **we-care-healthcare** project, configure these server-side variables:
+   - `SUPABASE_SERVICE_ROLE_KEY` — preferably a dedicated modern Supabase `sb_secret_...` key, **server-only**. Use [Supabase project API Keys](https://supabase.com/dashboard/project/xtlhcwonhgfwzydgrmeq/settings/api-keys) to create or reveal it. **Never paste it into chat, put it in `VITE_*` variables, or commit it to GitHub.**
+   - `WECARE_DEMO_SERVER_API_KEY` — independently generated random 32+ byte server-to-server testing credential (secret), **never put in frontend code**.
+   - `WECARE_BOOKING_API_ENABLED` — change from `false` to `true` only for approved fictional-data API integration tests, after the secrets exist and the owner reviews security. It must remain `false` for real patients.
+Then redeploy and test 401 for unauthenticated writes, shared availability, duplicate-slot rejection, cancellation-token validation and the 503 fail-closed path.
+
+Do not add database or test API secrets to the public Vercel `VITE_*` environment. A separate properly authenticated patient booking API and staff portal remain future milestones.
 
 ## Constraints before real clinic use
 
