@@ -28,13 +28,13 @@ The migration in `docs/booking-demo-schema.sql` was successfully applied using t
 - Performance advisor reports an unused index on the new empty table (expected).
 - All test inserts were removed (zero fictional booking rows left).
 
-Three Vercel environment variables were configured for production and preview: `SUPABASE_URL` (dedicated project URL), `WECARE_ALLOWED_ORIGINS` and `WECARE_BOOKING_API_ENABLED=false`. This is **not yet an active DB-backed API**.
+Four Vercel environment variables were configured for production and preview: `SUPABASE_URL` (dedicated project URL), `WECARE_ALLOWED_ORIGINS`, `WECARE_BOOKING_API_ENABLED=false`, and an encrypted random 256-bit `WECARE_DEMO_SERVER_API_KEY` for server-to-server fictional tests. The key value is not committed. This is **not yet an active DB-backed API**.
 
 ### Remaining private-key setup (manual for account owner)
 
 In the Vercel **we-care-healthcare** project, configure these server-side variables:
    - `SUPABASE_SERVICE_ROLE_KEY` — preferably a dedicated modern Supabase `sb_secret_...` key, **server-only**. Use [Supabase project API Keys](https://supabase.com/dashboard/project/xtlhcwonhgfwzydgrmeq/settings/api-keys) to create or reveal it. **Never paste it into chat, put it in `VITE_*` variables, or commit it to GitHub.**
-   - `WECARE_DEMO_SERVER_API_KEY` — independently generated random 32+ byte server-to-server testing credential (secret), **never put in frontend code**.
+   - `WECARE_DEMO_SERVER_API_KEY` — **already configured** in Vercel as an encrypted random 256-bit server-to-server testing credential. Never expose it to frontend code.
    - `WECARE_BOOKING_API_ENABLED` — change from `false` to `true` only for approved fictional-data API integration tests, after the secrets exist and the owner reviews security. It must remain `false` for real patients.
 Then redeploy and test 401 for unauthenticated writes, shared availability, duplicate-slot rejection, cancellation-token validation and the 503 fail-closed path.
 
