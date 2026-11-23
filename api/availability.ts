@@ -1,11 +1,12 @@
 import { demoDoctors, upcomingDays, visitTimestamp } from '../src/booking/demo.js'
-import { DatabaseRequestError, DatabaseUnavailable, dbRequest } from './_lib/db.js'
-import { reject, secureResponse, type ApiRequest, type ApiResponse } from './_lib/http.js'
+import { bookingEnabled, DatabaseRequestError, DatabaseUnavailable, dbRequest } from './_lib/db.js'
+import { appointmentDayFilter, reject, secureResponse, type ApiRequest, type ApiResponse } from './_lib/http.js'
 
 type StoredSlot = { starts_at: string }
 export default async function handler(request: ApiRequest, response: ApiResponse) {
   secureResponse(response)
   if (request.method !== 'GET') return reject(response, 405, 'METHOD_NOT_ALLOWED')
+  if (!bookingEnabled()) return reject(response, 503, 'BOOKING_DATABASE_NOT_CONFIGURED')
   const doctorId = request.query.doctorId
   const date = request.query.date
   if (typeof doctorId !== 'string' || typeof date !== 'string' ||
@@ -13,16 +14,9 @@ export default async function handler(request: ApiRequest, response: ApiResponse
     return reject(response, 400, 'INVALID_SLOT_QUERY')
 
   try {
-    const from = new Date(date + 'T00:00:00+05:30')
-    const until = new Date(from.getTime() + 24 * 60 * 60 * 1000)
-    const params = new URLSearchParams({
-      select: 'starts_at',
-      doctor_id: 'eq.' + doctorId,
-      status: 'eq.confirmed',
-      starts_at: 'gte.' + from.toISOString(),
-    })
-    // Query within the current day using an additional starts_at upper bound.
-    params.append('starts_at', 'lt.' + until.toISOString())
+    const params = appointmentDayFilter(date)
+    params.set('doctor_id', 'eq.' + doctorId)
+    params.set('status', 'eq.confirmed')
     const reserved = await dbRequest<StoredSlot[]>('wecare_demo_bookings?' + params)
     const doctor = demoDoctors.find(item => item.id === doctorId)!
     const slots: string[] = []
@@ -39,6 +33,7 @@ export default async function handler(request: ApiRequest, response: ApiResponse
   } catch (error) {
     const status = error instanceof DatabaseUnavailable ? 503 :
       error instanceof DatabaseRequestError ? error.code : 502
-    return reject(response, status, status === 503 ? 'BOOKING_DATABASE_NOT_CONFIGURED' : 'AVAILABILITY_UNAVAILABLE')
+    return reject(response, status,
+      status === 503 ? 'BOOKING_DATABASE_NOT_CONFIGURED' : 'AVAILABILITY_UNAVAILABLE')
   }
 }

@@ -1,9 +1,12 @@
 import { createHash, randomBytes, randomUUID } from 'node:crypto'
 import { demoDoctors, demoPatients, upcomingDays, visitTimestamp } from '../src/booking/demo.js'
-import { DatabaseRequestError, DatabaseUnavailable, dbRequest } from './_lib/db.js'
-import { isJsonPost, originPermitted, reject, secureResponse, type ApiRequest, type ApiResponse } from './_lib/http.js'
+import { bookingEnabled, DatabaseRequestError, DatabaseUnavailable, dbRequest } from './_lib/db.js'
+import {
+  isJsonPost, originPermitted, reject, secureResponse, serverDemoKeyConfigured,
+  validServerDemoKey, type ApiRequest, type ApiResponse,
+} from './_lib/http.js'
 
-type NewBooking = { reference: string; starts_at: string; doctor_id: string; patient_id: string; status: string }
+type PublicBooking = { reference: string; starts_at: string; doctor_id: string; patient_id: string; status: string }
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex')
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -13,6 +16,11 @@ export default async function handler(request: ApiRequest, response: ApiResponse
   secureResponse(response)
   if (request.method !== 'POST' && request.method !== 'DELETE')
     return reject(response, 405, 'METHOD_NOT_ALLOWED')
+  // Keep writes off until a dedicated DB and a strong, secret backend testing
+  // credential have been configured. A public browser cannot supply this key.
+  if (!bookingEnabled() || !serverDemoKeyConfigured())
+    return reject(response, 503, 'BOOKING_DATABASE_NOT_CONFIGURED')
+  if (!validServerDemoKey(request)) return reject(response, 401, 'UNAUTHORIZED')
   if (!isJsonPost(request)) return reject(response, 415, 'JSON_BODY_REQUIRED_OR_TOO_LARGE')
   if (!originPermitted(request)) return reject(response, 403, 'ORIGIN_NOT_ALLOWED')
   if (!isRecord(request.body)) return reject(response, 400, 'INVALID_REQUEST')
@@ -36,17 +44,19 @@ export default async function handler(request: ApiRequest, response: ApiResponse
 
       const cancellationToken = randomBytes(32).toString('hex')
       const reference = 'WC-DEMO-' + randomUUID().slice(0, 10).toUpperCase()
-      const rows = await dbRequest<NewBooking[]>('wecare_demo_bookings', {
-        method: 'POST',
-        body: {
-          reference,
-          doctor_id: doctorId,
-          patient_id: patientId,
-          starts_at: new Date(start).toISOString(),
-          status: 'confirmed',
-          cancellation_token_hash: hashToken(cancellationToken),
-        },
-      })
+      // Explicit projection prevents the stored cancellation-token hash from
+      // being returned or accidentally displayed in an API response.
+      const rows = await dbRequest<PublicBooking[]>(
+        'wecare_demo_bookings?select=reference,doctor_id,patient_id,starts_at,status', {
+          method: 'POST',
+          body: {
+            reference, doctor_id: doctorId, patient_id: patientId,
+            starts_at: new Date(start).toISOString(), status: 'confirmed',
+            cancellation_token_hash: hashToken(cancellationToken),
+          },
+        })
+      if (rows.length !== 1 || !rows[0].reference)
+        return reject(response, 502, 'BOOKING_RESPONSE_UNAVAILABLE')
       return response.status(201).json({
         ok: true, booking: rows[0], cancellationToken,
         notice: 'FICTIONAL BOOKING ONLY — NO REAL PATIENT OR CLINIC APPOINTMENT',
