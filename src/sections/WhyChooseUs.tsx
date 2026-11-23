@@ -1,4 +1,3 @@
-import SectionHeading from '../components/SectionHeading'
 import { carePrinciples } from '../data/clinic'
 import { ChevronRight } from 'lucide-react'
 
