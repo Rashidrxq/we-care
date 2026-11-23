@@ -31,3 +31,10 @@ The single source of truth for sample contact details, clinic hours, services an
 ## Before accepting real patients
 
 Replace sample data with verified information. Only add real doctor details and patient reviews with appropriate permission. Connect the appointment form to a secure backend and publish a privacy notice first. The current form does not transmit, store or book anything. Add a verified Google Maps location, real WhatsApp contact and active social profiles before publishing for a real clinic.
+
+## Departments & Treatments
+
+- Visit `/departments` for six patient education guides with search and department filtering.
+- Each page at `/departments/:slug` explains symptoms, diagnosis, treatment options, recovery/follow-up and important warning signs.
+- Medical information is general education with NHS and MedlinePlus sources, not individual advice. A real clinic should arrange qualified medical editorial review before launch.
+- `react-router-dom` handles internal navigation; `vercel.json` handles refreshes and direct links to subpages on Vercel.

@@ -9,5 +9,6 @@ export default function Services() {
       <div className="service-top"><span>{number} / 06</span><Icon size={23} strokeWidth={1.5} /></div><h3>{title}</h3><p>{description}</p>
       <a href="#appointment" aria-label={`Request an appointment for ${title}`} className="service-arrow"><ArrowUpRight size={18} /></a>
     </article>)}</div>
+    <a className="services-explore" href="/departments">Explore departments &amp; treatments <ArrowUpRight size={17} /></a>
   </div></section>
 }

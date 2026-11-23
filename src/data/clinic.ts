@@ -3,10 +3,11 @@ import {
 } from 'lucide-react'
 
 export const navigation = [
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Our doctors', href: '#doctors' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'About', href: '/#about' },
+  { label: 'Services', href: '/#services' },
+  { label: 'Departments & Treatments', href: '/departments' },
+  { label: 'Our doctors', href: '/#doctors' },
+  { label: 'Contact', href: '/#contact' },
 ]
 
 export const clinicDetails = {
