@@ -1,6 +1,6 @@
-import { demoDoctors, upcomingDays, visitTimestamp } from '../src/booking/demo'
-import { DatabaseRequestError, DatabaseUnavailable, dbRequest } from './_lib/db'
-import { reject, secureResponse, type ApiRequest, type ApiResponse } from './_lib/http'
+import { demoDoctors, upcomingDays, visitTimestamp } from '../src/booking/demo.js'
+import { DatabaseRequestError, DatabaseUnavailable, dbRequest } from './_lib/db.js'
+import { reject, secureResponse, type ApiRequest, type ApiResponse } from './_lib/http.js'
 
 type StoredSlot = { starts_at: string }
 export default async function handler(request: ApiRequest, response: ApiResponse) {

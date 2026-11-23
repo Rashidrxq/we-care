@@ -1,7 +1,7 @@
 import { createHash, randomBytes, randomUUID } from 'node:crypto'
-import { demoDoctors, demoPatients, upcomingDays, visitTimestamp } from '../src/booking/demo'
-import { DatabaseRequestError, DatabaseUnavailable, dbRequest } from './_lib/db'
-import { isJsonPost, originPermitted, reject, secureResponse, type ApiRequest, type ApiResponse } from './_lib/http'
+import { demoDoctors, demoPatients, upcomingDays, visitTimestamp } from '../src/booking/demo.js'
+import { DatabaseRequestError, DatabaseUnavailable, dbRequest } from './_lib/db.js'
+import { isJsonPost, originPermitted, reject, secureResponse, type ApiRequest, type ApiResponse } from './_lib/http.js'
 
 type NewBooking = { reference: string; starts_at: string; doctor_id: string; patient_id: string; status: string }
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex')

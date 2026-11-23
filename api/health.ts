@@ -1,5 +1,5 @@
-import { bookingEnabled } from './_lib/db'
-import { secureResponse, type ApiRequest, type ApiResponse } from './_lib/http'
+import { bookingEnabled } from './_lib/db.js'
+import { secureResponse, type ApiRequest, type ApiResponse } from './_lib/http.js'
 
 export default function handler(_request: ApiRequest, response: ApiResponse) {
   secureResponse(response)
