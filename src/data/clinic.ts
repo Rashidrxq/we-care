@@ -9,6 +9,17 @@ export const navigation = [
   { label: 'Contact', href: '#contact' },
 ]
 
+export const clinicDetails = {
+  name: 'WE CARE Healthcare',
+  locationName: 'Kozhikode, Kerala',
+  address: '2nd Floor, Sample Wellness Centre, Mavoor Road, Kozhikode, Kerala 673004',
+  phone: '+91 00000 00000',
+  email: 'hello@wecare.example',
+  hours: 'Mon–Sat · 9:00 AM–6:00 PM',
+  sunday: 'Sunday · Closed',
+} as const
+
+// Fictional demo information. Replace with verified clinic details before launch.
 export const services = [
   { icon: Stethoscope, number: '01', title: 'General Medicine', description: 'Thoughtful diagnosis and treatment for everyday health concerns and ongoing conditions.' },
   { icon: HeartHandshake, number: '02', title: 'Family Healthcare', description: 'Connected, continuous care for every age and every stage of family life.' },
@@ -19,9 +30,9 @@ export const services = [
 ]
 
 export const doctors = [
-  { name: '[Doctor Name]', role: 'General Physician', qualification: '[Verified qualifications]', experience: '[Years of experience]', image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=85' },
-  { name: '[Doctor Name]', role: 'Pediatrician', qualification: '[Verified qualifications]', experience: '[Years of experience]', image: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=900&q=85' },
-  { name: '[Doctor Name]', role: 'Women’s Healthcare', qualification: '[Verified qualifications]', experience: '[Years of experience]', image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=85' },
+  { name: 'Ananya Nair', role: 'General Physician', qualification: 'MBBS, MD (Medicine) · Sample', experience: '8 years · Sample', image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=85' },
+  { name: 'Fathima Rahman', role: 'Pediatrician', qualification: 'MBBS, MD (Pediatrics) · Sample', experience: '6 years · Sample', image: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=900&q=85' },
+  { name: 'Meera Krishnan', role: 'Women’s Healthcare', qualification: 'MBBS, DGO · Sample', experience: '10 years · Sample', image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=85' },
 ]
 
 export const carePrinciples = [

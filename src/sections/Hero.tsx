@@ -9,7 +9,7 @@ export default function Hero() {
           <div className="eyebrow"><span className="eyebrow-line" /> CARE, WITH YOU IN MIND</div>
           <h1>Healthcare that<br /><em>puts you first.</em></h1>
           <p className="hero-description">Compassionate care, experienced professionals, and a healthier tomorrow. Your well-being is at the heart of everything we do.</p>
-          <div className="hero-actions"><Button href="#appointment">Book an appointment</Button><a className="text-link" href="#services">Explore our services <ArrowRight size={16} /></a></div>
+          <div className="hero-actions"><Button href="#appointment">Try appointment demo</Button><a className="text-link" href="#services">Explore our services <ArrowRight size={16} /></a></div>
           <div className="hero-footnote"><span className="avatar-stack"><i>W</i><i>C</i><i>+</i></span><span>Personal attention.<br /><strong>Care you can feel.</strong></span><span className="footnote-divider" /><span className="footnote-note">A thoughtful approach<br />to every visit.</span></div>
         </div>
         <div className="hero-visual">
