@@ -14,9 +14,9 @@ export default function Navbar() {
       <Brand />
       <nav className={'nav-links ' + (open ? 'open' : '')} aria-label="Main navigation">
         {navigation.map(item => <Link key={item.href} to={item.href} onClick={() => setOpen(false)}>{item.label}</Link>)}
-        <Link className="mobile-book" to="/#appointment" onClick={() => setOpen(false)}>Appointment demo <ArrowUpRight size={15} /></Link>
+        <Link className="mobile-book" to="/book" onClick={() => setOpen(false)}>Book demo visit <ArrowUpRight size={15} /></Link>
       </nav>
-      <Link className="button button-dark nav-cta" to="/#appointment">Appointment demo <ArrowUpRight size={16} /></Link>
+      <Link className="button button-dark nav-cta" to="/book">Book demo visit <ArrowUpRight size={16} /></Link>
       <button className="menu-toggle" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button>
     </div></header>
   </>

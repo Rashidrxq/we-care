@@ -8,6 +8,7 @@ export const navigation = [
   { label: 'Departments & Treatments', href: '/departments' },
   { label: 'Our doctors', href: '/#doctors' },
   { label: 'Contact', href: '/#contact' },
+  { label: 'Book a demo visit', href: '/book' },
 ]
 
 export const clinicDetails = {

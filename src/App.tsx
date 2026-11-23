@@ -13,6 +13,8 @@ import Appointment from './sections/Appointment'
 import Contact from './sections/Contact'
 import DepartmentsPage from './pages/DepartmentsPage'
 import ConditionPage from './pages/ConditionPage'
+import BookingPage from './pages/BookingPage'
+import StaffDemoPage from './pages/StaffDemoPage'
 import { careGuides } from './data/guides'
 
 function HomePage() {
@@ -38,6 +40,8 @@ export default function App() {
     const match = careGuides.find(item => location.pathname === '/departments/' + item.slug)
     document.title = match ? match.title + ' | WE CARE Health Library'
       : location.pathname === '/departments' ? 'Departments & Treatments | WE CARE'
+      : location.pathname === '/book' ? 'Appointment Booking Demo | WE CARE'
+      : location.pathname === '/staff-demo' ? 'Staff Dashboard Demo | WE CARE'
       : 'WE CARE — Healthcare that puts you first'
     if (location.hash) window.requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView())
     else window.scrollTo({ top: 0, behavior: 'auto' })
@@ -49,6 +53,8 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/departments" element={<DepartmentsPage />} />
       <Route path="/departments/:slug" element={<ConditionPage />} />
+      <Route path="/book" element={<BookingPage />} />
+      <Route path="/staff-demo" element={<StaffDemoPage />} />
       <Route path="*" element={<DepartmentsPage />} />
     </Routes>
     <Footer />
