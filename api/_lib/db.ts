@@ -2,7 +2,11 @@
 // Never expose SUPABASE_SERVICE_ROLE_KEY to Vite (VITE_* variables are public).
 export class DatabaseUnavailable extends Error {}
 export class DatabaseRequestError extends Error {
-  constructor(public readonly code: number, message: string) { super(message) }
+  readonly code: number
+  constructor(code: number, message: string) {
+    super(message)
+    this.code = code
+  }
 }
 
 export function bookingEnabled(): boolean {
